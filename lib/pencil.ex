@@ -10,15 +10,17 @@ defmodule Pencil do
         paper <> text
     end
     def text_cost(text) do
-        String.graphemes(text)
+        String.to_charlist(text)
         |> Enum.reduce(0, fn char, acc -> acc + char_cost(char) end )
     end
 
+    def char_cost(char) when char in ?a..?z do
+        1
+    end
+    def char_cost(char) when char in ?A..?Z do
+        2
+    end
     def char_cost(char) do
-        cost = 1
-        if(String.upcase(char) == char) do
-            cost = 2
-        end
-        cost
+        0
     end
 end

@@ -23,4 +23,9 @@ defmodule PencilTest do
     Pencil.write(pencil, "", "HELP")
     assert Agent.get(pencil, fn state -> state end) == %{:durability => 2}
   end
+  test "writing spaces and newlines expends no graphite" do
+    pencil = Pencil.new(10)
+    Pencil.write(pencil, "", "HELP    \n")
+    assert Agent.get(pencil, fn state -> state end) == %{:durability => 2}
+  end
 end
