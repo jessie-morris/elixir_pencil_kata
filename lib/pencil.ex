@@ -5,8 +5,20 @@ defmodule Pencil do
     end
 
     def write(pencil, paper, text) do
-        text_size = String.length(text) 
-        Agent.update(pencil, fn state -> Map.update!(state, :durability, fn dura -> dura - text_size end) end) 
+        durability_cost = text_cost(text) 
+        Agent.update(pencil, fn state -> Map.update!(state, :durability, fn dura -> dura - durability_cost end) end) 
         paper <> text
+    end
+    def text_cost(text) do
+        String.graphemes(text)
+        |> Enum.reduce(0, fn char, acc -> acc + char_cost(char) end )
+    end
+
+    def char_cost(char) do
+        cost = 1
+        if(String.upcase(char) == char) do
+            cost = 2
+        end
+        cost
     end
 end

@@ -17,4 +17,10 @@ defmodule PencilTest do
     Pencil.write(pencil, "", "hello")
     assert Agent.get(pencil, fn state -> state end) == %{:durability => 5}
   end
+
+  test "Pencil durability drops 1 for each uppercase character" do
+    pencil = Pencil.new(10)
+    Pencil.write(pencil, "", "HELP")
+    assert Agent.get(pencil, fn state -> state end) == %{:durability => 2}
+  end
 end
