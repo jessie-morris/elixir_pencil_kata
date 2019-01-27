@@ -28,4 +28,8 @@ defmodule PencilTest do
     Pencil.write(pencil, "", "HELP    \n")
     assert Agent.get(pencil, fn state -> state end) == %{:durability => 2}
   end
+  test "pencil stops writing characters when durability hits 0" do
+    pencil = Pencil.new(4)
+    assert Pencil.write(pencil, "", "Text") == "Tex "
+  end
 end
