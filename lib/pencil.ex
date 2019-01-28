@@ -12,11 +12,11 @@ defmodule Pencil do
     def write_char(char, pencil, paper) do
         durability = Agent.get(pencil, fn state -> Map.get(state, :durability) end)
         char_cost = TextCost.text_cost(char)
-        is_writeable = durability > char_cost
+        is_writeable = durability >= char_cost
         Agent.update(pencil, fn state -> Map.update!(state, :durability, fn dura -> max(0, durability - char_cost) end) end) 
         cond do
-            durability >= char_cost -> paper <> char
-            durability < char_cost -> paper <> " "
+            is_writeable -> paper <> char
+            true -> paper <> " "
         end
     end
 end
