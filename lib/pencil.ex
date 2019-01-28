@@ -10,7 +10,7 @@ defmodule Pencil do
             |> Enum.reduce(paper, fn char, acc -> write_char(char, pencil, acc) end)
     end
     def write_char(char, pencil, paper) do
-        durability = Agent.get(pencil, fn state -> Map.get(state, :durability) end)
+        durability = durability(pencil) 
         char_cost = TextCost.text_cost(char)
         is_writeable = durability >= char_cost
         Agent.update(pencil, fn state -> Map.update!(state, :durability, fn dura -> max(0, durability - char_cost) end) end) 
@@ -18,5 +18,8 @@ defmodule Pencil do
             is_writeable -> paper <> char
             true -> paper <> " "
         end
+    end
+    def durability(pencil) do
+        Agent.get(pencil, fn state -> Map.get(state, :durability) end) 
     end
 end
