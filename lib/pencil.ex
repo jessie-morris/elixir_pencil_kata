@@ -5,10 +5,6 @@ defmodule Pencil do
     end
 
     def write(pencil, paper, text) do
-        durability_cost = TextCost.text_cost(text)
-        pencil_durability = Agent.get(pencil, fn state -> Map.get(state, :durability) end) 
-        new_durability = max(0, pencil_durability - durability_cost) 
-
         output_text = 
             String.graphemes(text)
             |> Enum.reduce(paper, fn char, acc -> write_char(char, pencil, acc) end)
