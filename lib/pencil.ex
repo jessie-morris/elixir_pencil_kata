@@ -12,10 +12,6 @@ defmodule Pencil do
         output_text = 
             String.graphemes(text)
             |> Enum.reduce(paper, fn char, acc -> write_char(char, pencil, acc) end)
-        
-        #Agent.update(pencil, fn state -> Map.update!(state, :durability, fn dura -> new_durability end) end) 
-        output_text
-
     end
     def write_char(char, pencil, paper) do
         durability = Agent.get(pencil, fn state -> Map.get(state, :durability) end)
