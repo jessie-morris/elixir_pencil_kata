@@ -10,12 +10,11 @@ defmodule Pencil do
   end
 
   defp write_char(char, pencil, paper) do
-    durability = durability(pencil)
-    char_cost = TextCost.text_cost(char)
-    is_writeable = durability >= char_cost
+    new_durability = durability(pencil) - TextCost.text_cost(char)
+    is_writeable = new_durability >= 0 
 
     Agent.update(pencil, fn state ->
-      Map.update!(state, :durability, fn _ -> max(0, durability - char_cost) end)
+      Map.update!(state, :durability, fn _ -> max(0, new_durability) end)
     end)
 
     cond do
