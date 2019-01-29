@@ -36,8 +36,7 @@ defmodule Pencil do
 
   def replace_last_occur(list, index) do
     replacement_string_length = String.length(Enum.at(list, index))
-    replacement_string =
-      Enum.reduce(0..(replacement_string_length - 1), "", fn _, acc -> acc <> " " end)
+    replacement_string = Enum.reduce(0..(replacement_string_length - 1), "", fn _, acc -> acc <> " " end)
 
     Enum.join(List.replace_at(list, index, replacement_string))
   end
