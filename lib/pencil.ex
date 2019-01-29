@@ -1,6 +1,6 @@
 defmodule Pencil do
-  def new(durability \\ 10) do
-    {:ok, pencil_actor} = Agent.start_link(fn -> %{:durability => durability} end)
+  def new(durability \\ 10, length \\ 10) do
+    {:ok, pencil_actor} = Agent.start_link(fn -> %{:durability => durability, :initial_durability => durability, :length => length} end)
     pencil_actor
   end
 
@@ -55,7 +55,21 @@ defmodule Pencil do
     last_index
   end
 
+  def sharpen(pencil) do
+    initial_dura = initial_durability(pencil)
+    if(pencil_length(pencil) > 0) do
+      Agent.update(pencil, fn state -> Map.update!(state, :durability, fn _ -> initial_dura end) end)
+      Agent.update(pencil, fn state -> Map.update!(state, :length, fn length -> length - 1 end) end) 
+    end 
+  end
+
   def durability(pencil) do
     Agent.get(pencil, fn state -> Map.get(state, :durability) end)
+  end
+  def pencil_length(pencil) do
+    Agent.get(pencil, fn state -> Map.get(state, :length) end)
+  end
+  def initial_durability(pencil) do
+    Agent.get(pencil, fn state -> Map.get(state, :initial_durability) end)
   end
 end
