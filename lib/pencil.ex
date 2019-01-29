@@ -1,6 +1,10 @@
 defmodule Pencil do
   def new(durability \\ 10, length \\ 10) do
-    {:ok, pencil_actor} = Agent.start_link(fn -> %{:durability => durability, :initial_durability => durability, :length => length} end)
+    {:ok, pencil_actor} =
+      Agent.start_link(fn ->
+        %{:durability => durability, :initial_durability => durability, :length => length}
+      end)
+
     pencil_actor
   end
 
@@ -20,11 +24,15 @@ defmodule Pencil do
   end
 
   def sharpen(pencil) do
-    initial_dura = initial_durability(pencil)
     if(pencil_length(pencil) > 0) do
-      Agent.update(pencil, fn state -> Map.update!(state, :durability, fn _ -> initial_dura end) end)
-      Agent.update(pencil, fn state -> Map.update!(state, :length, fn length -> length - 1 end) end) 
-    end 
+      Agent.update(pencil, fn state ->
+        Map.update!(state, :durability, fn _ -> Map.get(state, :initial_durability) end)
+      end)
+
+      Agent.update(pencil, fn state ->
+        Map.update!(state, :length, fn length -> length - 1 end)
+      end)
+    end
   end
 
   def durability(pencil) do
@@ -41,7 +49,7 @@ defmodule Pencil do
 
   defp write_char(char, pencil, paper) do
     new_durability = durability(pencil) - TextCost.text_cost(char)
-    is_writeable = new_durability >= 0 
+    is_writeable = new_durability >= 0
 
     Agent.update(pencil, fn state ->
       Map.update!(state, :durability, fn _ -> max(0, new_durability) end)
@@ -55,7 +63,9 @@ defmodule Pencil do
 
   defp replace_last_occur(list, index) do
     replacement_string_length = String.length(Enum.at(list, index))
-    replacement_string = Enum.reduce(0..(replacement_string_length - 1), "", fn _, acc -> acc <> " " end)
+
+    replacement_string =
+      Enum.reduce(0..(replacement_string_length - 1), "", fn _, acc -> acc <> " " end)
 
     Enum.join(List.replace_at(list, index, replacement_string))
   end

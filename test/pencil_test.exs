@@ -42,18 +42,20 @@ defmodule PencilTest do
   test "pencil erases the last occurance of a word from the text" do
     assert Pencil.erase("hey girl hey", "hey") == "hey girl    "
   end
+
   test "pencil gets sharpened and returned to initial durability when length > 0" do
-    pencil = Pencil.new(10,10)
+    pencil = Pencil.new(10, 10)
     Pencil.write(pencil, "", "hello")
     Pencil.sharpen(pencil)
     assert Pencil.pencil_length(pencil) == 9
     assert Pencil.durability(pencil) == 10
   end
+
   test "pencil doesnt get free durability if length == 0" do
-    pencil = Pencil.new(5,0)
+    pencil = Pencil.new(5, 0)
     Pencil.write(pencil, "", "hello")
     Pencil.sharpen(pencil)
     assert Pencil.pencil_length(pencil) == 0
-    assert Pencil.durability(pencil) == 0 
+    assert Pencil.durability(pencil) == 0
   end
 end
