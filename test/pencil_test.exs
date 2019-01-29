@@ -21,13 +21,15 @@ defmodule PencilTest do
   test "Pencil durability drops 1 for each uppercase character" do
     pencil = Pencil.new(10)
     Pencil.write(pencil, "", "HELP")
-    assert Pencil.durability(pencil) == 2 
+    assert Pencil.durability(pencil) == 2
   end
+
   test "writing spaces and newlines expends no graphite" do
     pencil = Pencil.new(10)
     Pencil.write(pencil, "", "HELP    \n")
-    assert Pencil.durability(pencil) == 2 
+    assert Pencil.durability(pencil) == 2
   end
+
   test "pencil stops writing characters when durability hits 0" do
     pencil = Pencil.new(4)
     assert Pencil.write(pencil, "", "Text") == "Tex "
@@ -36,6 +38,7 @@ defmodule PencilTest do
   test "pencil erases a word from the text" do
     assert Pencil.erase("hey girl", "hey") == "    girl"
   end
+
   test "pencil erases the last occurance of a word from the text" do
     assert Pencil.erase("hey girl hey", "hey") == "hey girl    "
   end
