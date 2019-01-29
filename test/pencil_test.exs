@@ -32,4 +32,11 @@ defmodule PencilTest do
     pencil = Pencil.new(4)
     assert Pencil.write(pencil, "", "Text") == "Tex "
   end
+
+  test "pencil erases a word from the text" do
+    assert Pencil.erase("hey girl", "hey") == "    girl"
+  end
+  test "pencil erases the last occurance of a word from the text" do
+    assert Pencil.erase("hey girl hey", "hey") == "hey girl    "
+  end
 end
